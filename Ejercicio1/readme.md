@@ -1,6 +1,15 @@
 # Análisis de Temperaturas del Transbordador Espacial Challenger
 
-La tragedia del transbordador espacial Challenger en 1986 llevó a investigaciones sobre las causas de la falla de la misión, centrándose especialmente en el comportamiento de los sellos anulares del motor del cohete. A continuación se presentan los datos de temperatura (°F) registrados durante los encendidos de prueba y lanzamientos del motor. Para comprender mejor cómo estas temperaturas podrían haber influido en los lanzamientos, se requiere un análisis básico de los datos.
+La tragedia del transbordador espacial Challenger en 1986 llevó a investigaciones sobre las causas de la falla de la misión, centrándose especialmente en el comportamiento de los sellos anulares del motor del cohete. A continuación se presentan los datos de temperatura (°F) registrados durante los encendidos de prueba y lanzamientos del motor:
+
+```python
+# Datos de temperatura (°F)
+datos = [84, 49, 61, 40, 83, 67, 45, 66, 70, 69, 80, 58,
+         68, 60, 67, 72, 73, 70, 57, 63, 70, 78, 52, 67,
+         53, 67, 75, 61, 70, 81, 76, 79, 75, 76, 58, 31]
+```
+
+Para comprender mejor cómo estas temperaturas podrían haber influido en los lanzamientos, se requiere un análisis básico de los datos.
 
 ## Preguntas Prácticas
 
