@@ -1,5 +1,7 @@
 # Análisis de Temperaturas del Transbordador Espacial Challenger
 
+![transbordador](transbordador.jpg)
+
 La tragedia del transbordador espacial Challenger en 1986 llevó a investigaciones sobre las causas de la falla de la misión, centrándose especialmente en el comportamiento de los sellos anulares del motor del cohete. A continuación se presentan los datos de temperatura (°F) registrados durante los encendidos de prueba y lanzamientos del motor:
 
 ```python
