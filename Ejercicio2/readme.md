@@ -1,5 +1,5 @@
 El reporte de una medida de centro da sólo información parcial sobre un conjunto o distribución de datos. Diferentes muestras o poblaciones pueden tener medidas idénticas de centro y aún diferir entre sí en otras importantes maneras. Este ejercicio muestra gráficas de
-puntos de tres muestras (experimentos), aunque el grado de dispersión en torno al centro es diferente para las tres muestras. La primera tiene la cantidad más grande de variabilidad, la tercera tiene la cantidad más pequeña y la segunda es intermedia con respecto a las otras dos. Calcular media y mediana para los tres experimentos. 
+puntos de tres muestras (experimentos), aunque el grado de dispersión en torno al centro es diferente para las tres muestras. La primera tiene la cantidad más grande de variabilidad, la tercera tiene la cantidad más pequeña y la segunda es intermedia con respecto a las otras dos. Calcular para los tres experimentos: 1. media y mediana , 2. Moda, Varianza, desviación estandar y rango.
 
 muestra1 = [35, 42, 58, 65, 48, 52, 60, 38, 62, 45]
 
