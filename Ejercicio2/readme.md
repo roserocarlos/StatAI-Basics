@@ -2,6 +2,8 @@
 
 El reporte de una medida de centro da sólo información parcial sobre un conjunto o distribución de datos. Diferentes muestras o poblaciones pueden tener medidas idénticas de centro y aún diferir entre sí en otras importantes maneras. Este ejercicio muestra gráficas de puntos de tres muestras (experimentos), aunque el grado de dispersión en torno al centro es diferente para las tres muestras:
 
+![Distribución de muestras](distribucion-de-muestras.png)
+
 ```python
 # Muestra 1: Tiene la cantidad más grande de variabilidad.
 m1 = [35, 42, 58, 65, 48, 52, 60, 38, 62, 45]
