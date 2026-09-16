@@ -1,9 +1,54 @@
-Este ejercicio trabaja con un dataset real de sensores IoT agrícolas: Plant_health_data.csv (Kaggle, autor gowthamduggirala), con 1200 registros y 14 columnas que incluyen humedad de suelo, temperatura ambiente y de suelo, humedad relativa del aire, intensidad lumínica, pH del suelo, niveles de nitrógeno, fósforo y potasio, contenido de clorofila y una señal electroquímica usada como proxy de conductividad eléctrica. El objetivo es predecir el estado de salud del cultivo (Plant_Health_Status: Healthy, Moderate Stress o High Stress) a partir de estos 10 sensores numéricos, replicando el flujo real de trabajo de un científico de datos aplicado a la agricultura de precisión.
+# 🌾 Machine Learning para Agricultura de Precisión: Monitoreo de Salud de Cultivos IoT
 
-El notebook Cultivating_ML.ipynb está organizado en 8 sesiones incrementales, donde el código de cada una continúa el de la anterior: Sesión 1, carga y estructura del dato rectangular; Sesión 2, estadística descriptiva y limpieza robusta con imputación por mediana; Sesión 3, análisis exploratorio de datos (histogramas y matriz de correlación de Pearson); Sesión 4, transformación logarítmica de la escala de potencias de Tukey para linealizar sensores con cola larga; Sesión 5, partición estratificada 80/20 y estandarización Z-score sin fuga de datos; Sesión 6, comparación entre Regresión Logística y Árbol de Decisión CART; Sesión 7, ensambles Random Forest y XGBoost con validación cruzada e importancia de variables; y Sesión 8, pipeline consolidado con la tabla comparativa de los 4 modelos, matriz de confusión y reporte de clasificación del mejor modelo.
+Este repositorio contiene un ejercicio práctico basado en un **dataset real de sensores IoT agrícolas** (`Plant_health_data.csv`, obtenido de Kaggle por *gowthamduggirala*). El proyecto replica el flujo de trabajo completo de un científico de datos aplicado al sector agroindustrial.
 
-Antes de ejecutar el notebook en Colab necesitas un token de la API de Kaggle: en tu cuenta de Kaggle ve a Settings > API > Create New Token, descarga el archivo kaggle.json, y súbelo cuando la primera celda del notebook lo solicite. Esa celda descarga automáticamente el dataset real desde Kaggle a la carpeta ./data.
+---
 
-Preguntas Prácticas:
+## 📊 Sobre el Dataset
 
-Sesión 2: ¿qué sensor muestra la mayor diferencia entre su media y su mediana? ¿Qué indica eso sobre la presencia de outliers producidos por fallos de sensor? Sesión 3: ¿qué par de sensores tiene la correlación de Pearson más alta (en valor absoluto) y cuál la más cercana a cero? Interpreta ambos casos. Sesión 4: aplica la transformación logarítmica a otro sensor con distribución sesgada (por ejemplo Potassium_Level) y evalúa si mejora alguna correlación de interés. Sesión 5: quita stratify=y del train_test_split y observa cuántos registros de "High Stress" quedan en el conjunto de prueba. Sesión 6: cambia max_depth del árbol CART a 2 y luego a 10, y relaciona los cambios en F1-macro con el concepto de sobreajuste. Sesión 7: identifica los 3 sensores con mayor importancia en tu corrida y propón una explicación agronómica. Sesión 8: con tus propios resultados, concluye qué modelo desplegarías en campo considerando tanto el F1-macro como el recall de la clase "High Stress".
+* **Registros:** 1,200 muestras.
+* **Columnas:** 14 variables en total.
+* **Variables predictoras (10 sensores numéricos):** Humedad del suelo, temperatura ambiente y de suelo, humedad relativa del aire, intensidad lumínica, pH del suelo, niveles de nitrógeno ($N$), fósforo ($P$) y potasio ($K$), contenido de clorofila y una señal electroquímica (utilizada como proxy de conductividad eléctrica).
+* **Variable objetivo (`Plant_Health_Status`):** Predicción del estado de salud del cultivo dividida en tres categorías:
+  * `Healthy` (Saludable)
+  * `Moderate Stress` (Estrés moderado)
+  * `High Stress` (Estrés alto)
+
+---
+
+## 📓 Estructura del Notebook (`Cultivating_ML.ipynb`)
+
+El notebook está organizado en **8 sesiones incrementales**, donde el código de cada sección da continuidad al anterior:
+
+* **Sesión 1:** Carga y estructura del dato rectangular.
+* **Sesión 2:** Estadística descriptiva y limpieza robusta con imputación por mediana.
+* **Sesión 3:** Análisis exploratorio de datos (histogramas y matriz de correlación de Pearson).
+* **Sesión 4:** Transformación logarítmica y escala de potencias de Tukey para linealizar sensores con cola larga.
+* **Sesión 5:** Partición estratificada 80/20 y estandarización Z-score sin fuga de datos (*data leakage*).
+* **Sesión 6:** Modelado comparativo entre Regresión Logística y Árbol de Decisión CART.
+* **Sesión 7:** Modelos de ensamblaje (*Random Forest* y *XGBoost*) con validación cruzada e importancia de variables.
+* **Sesión 8:** Pipeline consolidado, tabla comparativa de los 4 modelos, matriz de confusión y reporte de clasificación del mejor modelo.
+
+---
+
+## ⚙️ Requisitos Previos y Configuración en Google Colab
+
+Antes de ejecutar el notebook en Colab, asegúrate de contar con tus credenciales de la API de Kaggle:
+
+1. Dirígete a tu cuenta de Kaggle en **Settings > API > Create New Token**.
+2. Descarga el archivo de credenciales (`kaggle.json`).
+3. Sube el archivo cuando la primera celda del notebook lo solicite. Esta celda se encargará de descargar automáticamente el dataset real directamente a la carpeta `./data`.
+
+---
+
+## ❓ Preguntas Prácticas para el Análisis
+
+Para profundizar en el desarrollo del proyecto, responde y analiza los siguientes puntos a lo largo de las sesiones:
+
+* **Sesión 2:** ¿Qué sensor muestra la mayor diferencia entre su media y su mediana? ¿Qué indica esto sobre la presencia de *outliers* producidos por fallos de sensor?
+* **Sesión 3:** ¿Qué par de sensores tiene la correlación de Pearson más alta (en valor absoluto) y cuál la más cercana a cero? Interpreta ambos casos.
+* **Sesión 4:** Aplica la transformación logarítmica a otro sensor con distribución sesgada (por ejemplo, `Potassium_Level`) y evalúa si mejora alguna correlación de interés.
+* **Sesión 5:** Quita el parámetro `stratify=y` del `train_test_split` y observa cuántos registros de la clase *"High Stress"* quedan en el conjunto de prueba.
+* **Sesión 6:** Cambia el hiperparámetro `max_depth` del árbol CART a `2` y posteriormente a `10`. Relaciona los cambios en el puntaje **F1-macro** con el concepto de sobreajuste (*overfitting*).
+* **Sesión 7:** Identifica los 3 sensores con mayor importancia en tu corrida experimental y propón una justificación o explicación agronómica.
+* **Sesión 8:** Con base en tus propios resultados, concluye razonadamente **qué modelo desplegarías en campo**, sopesando tanto el rendimiento global (**F1-macro**) como la capacidad de detección oportuna (**recall** de la clase *"High Stress"*).
