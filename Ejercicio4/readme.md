@@ -6,10 +6,11 @@ Este repositorio contiene un ejercicio práctico basado en un **dataset real de 
 
 ## 📊 Sobre el Dataset
 
-* **Registros:** 1,200 muestras.
+* **Registros:** 1,200 muestras (10 plantas × 120 lecturas cada una, cada 6 horas).
 * **Columnas:** 14 variables en total.
-* **Variables predictoras (10 sensores numéricos):** Humedad del suelo, temperatura ambiente y de suelo, humedad relativa del aire, intensidad lumínica, pH del suelo, niveles de nitrógeno ($N$), fósforo ($P$) y potasio ($K$), contenido de clorofila y una señal electroquímica (utilizada como proxy de conductividad eléctrica).
-* **Variable objetivo (`Plant_Health_Status`):** Predicción del estado de salud del cultivo dividida en tres categorías:
+* **Variables predictoras (10 sensores numéricos, `SENSORES_NUM`):** humedad del suelo, temperatura ambiente y de suelo, humedad relativa del aire, intensidad lumínica, pH del suelo, niveles de nitrógeno (N), fósforo (P) y potasio (K), y una señal electroquímica (proxy de conductividad eléctrica).
+* **Otras columnas del dataset (no son predictoras):** `Timestamp` y `Plant_ID` (identificadores), y `Chlorophyll_Content` — esta última no se usa como predictor del modelo; solo aparece en la Sesión 4 como variable de comparación al probar la transformación logarítmica.
+* **Variable objetivo (`Plant_Health_Status`):** predicción del estado de salud del cultivo en tres categorías:
   * `Healthy` (Saludable)
   * `Moderate Stress` (Estrés moderado)
   * `High Stress` (Estrés alto)
@@ -18,37 +19,38 @@ Este repositorio contiene un ejercicio práctico basado en un **dataset real de 
 
 ## 📓 Estructura del Notebook (`Cultivating_ML.ipynb`)
 
-El notebook está organizado en **8 sesiones incrementales**, donde el código de cada sección da continuidad al anterior:
+El notebook está organizado en **8 sesiones incrementales**: el código de cada una da continuidad a la anterior, y dentro de cada sesión el trabajo está partido en bloques cortos (uno por tarea), cada uno con una línea de texto explicando qué hace, seguidos de una celda corta de "visualización de apoyo" y el ejercicio de cierre.
 
-* **Sesión 1:** Carga y estructura del dato rectangular.
-* **Sesión 2:** Estadística descriptiva y limpieza robusta con imputación por mediana.
-* **Sesión 3:** Análisis exploratorio de datos (histogramas y matriz de correlación de Pearson).
-* **Sesión 4:** Transformación logarítmica y escala de potencias de Tukey para linealizar sensores con cola larga.
-* **Sesión 5:** Partición estratificada 80/20 y estandarización Z-score sin fuga de datos (*data leakage*).
-* **Sesión 6:** Modelado comparativo entre Regresión Logística y Árbol de Decisión CART.
-* **Sesión 7:** Modelos de ensamblaje (*Random Forest* y *XGBoost*) con validación cruzada e importancia de variables.
-* **Sesión 8:** Pipeline consolidado, tabla comparativa de los 4 modelos, matriz de confusión y reporte de clasificación del mejor modelo.
+* **Sesión 1:** carga del CSV (detección insensible a mayúsculas/minúsculas) y estructura del dato rectangular.
+* **Sesión 2:** estadística descriptiva (media, mediana, moda) y limpieza **según el origen físico de cada sensor** — interpolación dentro de la serie temporal de cada planta para los sensores que siguen un proceso direccional (humedad de suelo, luz, temperatura ambiente, humedad relativa), y mediana global para los que cambian más lento (pH, N, P, K). No se impone una sola estrategia de limpieza para todos los sensores por igual.
+* **Sesión 3:** análisis exploratorio — correlación de Pearson entre sensores, **boxplots por clase y ANOVA F-test** para ver qué sensores distinguen realmente los 3 niveles de salud (antes de entrenar cualquier modelo), e histograma de `Light_Intensity`.
+* **Sesión 4:** transformación logarítmica (`log10(x+1)`) como técnica de linealización de Tukey. En este dataset en particular, el sesgo (`skew`) de los 10 sensores es cercano a 0, así que el transform casi no cambia las correlaciones — un resultado real y honesto, no forzado — y por eso no se lleva la versión transformada al modelado final.
+* **Sesión 5:** partición estratificada 80/20 y estandarización Z-score, ajustando el `scaler` solo con el conjunto de entrenamiento (sin fuga de datos).
+* **Sesión 6:** modelado comparativo entre Regresión Logística y Árbol de Decisión CART.
+* **Sesión 7:** modelos de ensamblaje (Random Forest y XGBoost) con validación cruzada e importancia de variables.
+* **Sesión 8:** pipeline consolidado, tabla comparativa de los 4 modelos, matriz de confusión y reporte de clasificación del mejor modelo.
 
 ---
 
 ## ⚙️ Requisitos Previos y Configuración en Google Colab
 
-Antes de ejecutar el notebook en Colab, asegúrate de contar con tus credenciales de la API de Kaggle:
+Este notebook **no usa la API de Kaggle** (no hace falta `kaggle.json`). El archivo se sube manualmente:
 
-1. Dirígete a tu cuenta de Kaggle en **Settings > API > Create New Token**.
-2. Descarga el archivo de credenciales (`kaggle.json`).
-3. Sube el archivo cuando la primera celda del notebook lo solicite. Esta celda se encargará de descargar automáticamente el dataset real directamente a la carpeta `./data`.
+1. Descarga `Plant_health_data.csv` desde [Kaggle](https://www.kaggle.com/datasets/gowthamduggirala/plant-health-data) a tu computador.
+2. Abre el notebook en Colab y corre la primera celda de código (Paso 0): te va a pedir que subas un archivo.
+3. Selecciona el CSV que descargaste. La celda lo guarda automáticamente en la carpeta `./data` (funciona tanto si el archivo se llama `Plant_health_data.csv` como `plant_health_data.csv`).
 
 ---
 
 ## ❓ Preguntas Prácticas para el Análisis
 
-Para profundizar en el desarrollo del proyecto, responde y analiza los siguientes puntos a lo largo de las sesiones:
+Cada ejercicio del notebook ya trae su propia pista de sintaxis/función a usar. Como guía general de lo que se evalúa en cada sesión:
 
-* **Sesión 2:** ¿Qué sensor muestra la mayor diferencia entre su media y su mediana? ¿Qué indica esto sobre la presencia de *outliers* producidos por fallos de sensor?
-* **Sesión 3:** ¿Qué par de sensores tiene la correlación de Pearson más alta (en valor absoluto) y cuál la más cercana a cero? Interpreta ambos casos.
-* **Sesión 4:** Aplica la transformación logarítmica a otro sensor con distribución sesgada (por ejemplo, `Potassium_Level`) y evalúa si mejora alguna correlación de interés.
-* **Sesión 5:** Quita el parámetro `stratify=y` del `train_test_split` y observa cuántos registros de la clase *"High Stress"* quedan en el conjunto de prueba.
-* **Sesión 6:** Cambia el hiperparámetro `max_depth` del árbol CART a `2` y posteriormente a `10`. Relaciona los cambios en el puntaje **F1-macro** con el concepto de sobreajuste (*overfitting*).
-* **Sesión 7:** Identifica los 3 sensores con mayor importancia en tu corrida experimental y propón una justificación o explicación agronómica.
-* **Sesión 8:** Con base en tus propios resultados, concluye razonadamente **qué modelo desplegarías en campo**, sopesando tanto el rendimiento global (**F1-macro**) como la capacidad de detección oportuna (**recall** de la clase *"High Stress"*).
+* **Sesión 1:** confirma filas/columnas del dataset y que `SENSORES_NUM` coincide con las columnas reales.
+* **Sesión 2:** calcula la diferencia relativa entre media y mediana para los 10 sensores. ¿Cuál tiene la mayor? Con esas cifras (todas por debajo del 1.3% en el dataset real), ¿hay evidencia de outliers fuertes, o las distribuciones son bastante simétricas?
+* **Sesión 3 (dos partes):** (a) con los boxplots y el ANOVA F-test, ¿qué 2-3 sensores separan mejor las 3 clases de salud? — vas a comparar esta lista con el ranking de importancia de la Sesión 7. (b) con el promedio de `Light_Intensity` por hora de lectura, ¿hay un ciclo día/noche marcado, o no? ¿Por qué podría no haberlo en este cultivo?
+* **Sesión 4:** ¿por qué `log10(x+1)` y no `log10(x)`? Identifica el sensor con mayor sesgo (`skew`) y prueba si transformarlo cambia alguna correlación de interés.
+* **Sesión 5:** quita `stratify=y` de `train_test_split` y observa cuántos registros de *"High Stress"* quedan en el conjunto de prueba.
+* **Sesión 6:** cambia `max_depth` del árbol CART a `2` y luego a `10`. Relaciona los cambios en F1-macro con sobreajuste (*overfitting*).
+* **Sesión 7:** anota los 3 sensores con mayor importancia en tu corrida. ¿Coinciden con los que ya habías identificado en el ANOVA de la Sesión 3? Propón una explicación agronómica.
+* **Sesión 8 (dos partes):** (a) CART y Random Forest llegan a 100% de accuracy — ¿eso te da confianza o sospecha? ¿Qué revisarías para descartar que el dataset se generó con umbrales simples? (b) con tus propios resultados, ¿qué modelo desplegarías en campo, considerando tanto F1-macro como el recall de *"High Stress"*?
